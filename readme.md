@@ -1,4 +1,4 @@
-## This code is a Java library implementation for Android for the GigaChat neural network.
+## A Java library for the GigaChat API for Android
 
 - Please note: We are not an official Sber library; we are simply an implementation of a library for working with their API for Android.
 

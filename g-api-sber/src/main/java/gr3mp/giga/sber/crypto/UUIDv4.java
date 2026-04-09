@@ -1,5 +1,5 @@
 /*
- * This code is a Java library implementation for Android for the GigaChat neural network.
+ * A Java library for the GigaChat API for Android
  *
  * The code is distributed under the GNU GPL v.2 license.
  * You can see a copy of the license in the root library folder.
