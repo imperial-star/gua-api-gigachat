@@ -1,4 +1,4 @@
-## g-api-sber is a Java library implementation for Android for the GigaChat neural network.
+## This code is a Java library implementation for Android for the GigaChat neural network.
 
 - Please note: We are not an official Sber library; we are simply an implementation of a library for working with their API for Android.
 
