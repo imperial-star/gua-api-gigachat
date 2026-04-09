@@ -4,7 +4,7 @@
  * The code is distributed under the GNU GPL v.2 license.
  * You can see a copy of the license in the root library folder.
  *
- * Copyright of the library Gleb Obitotsky 2026 <oximif174@gmail.com>
+ * Copyright Gleb Obitotsky 2026 <oximif174@gmail.com>
  */
 
 package api.ggroup.sber
