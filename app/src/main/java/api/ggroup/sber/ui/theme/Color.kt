@@ -1,0 +1,20 @@
+/*
+ * This code is a Java library implementation for Android for the GigaChat neural network.
+ *
+ * The code is distributed under the GNU GPL v.2 license.
+ * You can see a copy of the license in the root library folder.
+ *
+ * Copyright of the library Gleb Obitotsky 2026 <oximif174@gmail.com>
+ */
+
+package api.ggroup.sber.ui.theme
+
+import androidx.compose.ui.graphics.Color
+
+val Purple80 = Color(0xFFD0BCFF)
+val PurpleGrey80 = Color(0xFFCCC2DC)
+val Pink80 = Color(0xFFEFB8C8)
+
+val Purple40 = Color(0xFF6650a4)
+val PurpleGrey40 = Color(0xFF625b71)
+val Pink40 = Color(0xFF7D5260)
