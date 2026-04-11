@@ -14,6 +14,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +26,7 @@ import api.ggroup.sber.ui.theme.GigachatapiTheme
 import gr3mp.giga.sber.auth.AccessToken
 import api.ggroup.sber.BuildVars.client_id
 import api.ggroup.sber.BuildVars.client_secret
+import gr3mp.giga.sber.auth.Models
 
 import okhttp3.Call
 import okhttp3.Callback
@@ -37,7 +40,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             GigachatapiTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    GigaChatScreen(modifier = Modifier.padding(innerPadding))
+                    // GigaChatScreen(modifier = Modifier.padding(innerPadding))
+                    GigaChatTestScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -96,4 +100,70 @@ fun GigaChatScreen(modifier: Modifier = Modifier) {
             Text(if (isLoading) "..." else "Token")
         }
     }
+}
+
+@Composable
+fun GigaChatTestScreen(modifier: Modifier = Modifier) {
+    var resultText by remember { mutableStateOf("test") }
+    var isLoading by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier.fillMaxSize().padding(16.dp).verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = resultText, style = MaterialTheme.typography.bodySmall)
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(
+            onClick = {
+                isLoading = true
+                resultText = "1"
+
+                AccessToken.getAccessToken(client_id, client_secret, "GIGACHAT_API_PERS", object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        resultText = "error net (token): ${e.message}"
+                        isLoading = false
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        val body = response.body?.string() ?: ""
+                        if (response.isSuccessful) {
+                            val token = extractToken(body)
+
+                            resultText = "2..."
+                            Models.getModels(token, object : Callback {
+                                override fun onFailure(call: Call, e: IOException) {
+                                    resultText = "error net (model): ${e.message}"
+                                    isLoading = false
+                                }
+
+                                override fun onResponse(call: Call, response: Response) {
+                                    val modelsBody = response.body?.string() ?: "-"
+                                    resultText = if (response.isSuccessful) {
+                                        "model:\n$modelsBody"
+                                    } else {
+                                        "error aoi model (${response.code}): $modelsBody"
+                                    }
+                                    isLoading = false
+                                }
+                            })
+                        } else {
+                            resultText = "error auth: ${response.code}\n$body"
+                            isLoading = false
+                        }
+                    }
+                })
+            },
+            enabled = !isLoading
+        ) {
+            Text(if (isLoading) "work..." else "run test")
+        }
+    }
+}
+
+fun extractToken(json: String): String {
+    return try {
+        json.substringAfter("access_token\":\"").substringBefore("\"")
+    } catch (e: Exception) { "" }
 }
